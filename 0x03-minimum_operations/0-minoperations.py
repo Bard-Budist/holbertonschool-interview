@@ -3,6 +3,7 @@
 Task
 """
 
+
 def minOperations(n):
     """
     """
