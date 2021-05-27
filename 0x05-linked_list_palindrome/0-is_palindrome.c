@@ -36,13 +36,8 @@ int is_palindrome(listint_t **head)
 	}
 
 	splitStart->next = NULL;
-	printf("------------------");
 	reverse_listint(&splitEnd);
-	print_listint(reverse_listint(&splitStart));
-
 	int result = check(&splitEnd, head, splitStart->n);
-
-
 
 	return (result);
 }
