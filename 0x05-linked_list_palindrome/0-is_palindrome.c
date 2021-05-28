@@ -1,92 +1,72 @@
 #include "lists.h"
 
 /**
- * is_palindrome - checks if a singly linked list is a palindrome
- * @head: head linked list
- * Return: Always 0.
+ * is_palindrome - checks if a linked list is palindrome
+ * @head: linked list head
+ * Return: 1 if is palindrome or 0 if not
  */
+
 int is_palindrome(listint_t **head)
 {
-	listint_t *splitStart = *head;
-	listint_t *splitEnd;
-	listint_t *tmp = *head;
+	int length = list_length(head);
+	int half_length = length / 2;
+	int i, if_palindrome = 1;
+	listint_t *reversed_head;
+	listint_t *current = *head;
+	listint_t *current_reversed;
 
-	if (*head == NULL)
+	reversed_head = *head;
+	for (i = 0; i < half_length; i++)
+		reversed_head = reversed_head->next;
+	if (length % 2 != 0)
+		reversed_head = reversed_head->next;
+	reversed_head = reversed(&reversed_head);
+	current_reversed = reversed_head;
+	current = *head;
+	while (current_reversed != NULL)
 	{
-		return (1);
+		if (current_reversed->n != current->n)
+			if_palindrome = 0;
+		current_reversed = current_reversed->next;
+		current = current->next;
 	}
-
-	while (1)
-	{
-		tmp = tmp->next->next;
-		if (tmp == NULL)
-		{
-			splitEnd = splitStart->next;
-			break;
-		}
-		if (tmp->next == NULL)
-		{
-			splitEnd = splitStart->next->next;
-			break;
-		}
-
-		splitStart = splitStart->next;
-	}
-
-	splitStart->next = NULL;
-	reverse_listint(&splitEnd);
-	int result = check(&splitEnd, head, splitStart->n);
-
-	return (result);
+	return (if_palindrome);
 }
 
 /**
- * reverse_listint -  Reverse list
- * @head: Head
- * Return:Head
- *
+ * list_length - Get the length of a linked list
+ * @head: linked list head
+ * Return: lenght
  */
-listint_t *reverse_listint(listint_t **head)
-{
-	listint_t *prev = NULL, *next = NULL;
 
-	while (*head != NULL)
+int list_length(listint_t **head)
+{
+	int i;
+	listint_t *current = *head;
+
+	for (i = 0; current != NULL; i++)
+		current = current->next;
+	return (i);
+}
+
+/**
+ * reversed - function that reversed a linked list
+ * @head: double pointer
+ * Return: Address of the new element
+ */
+
+listint_t *reversed(listint_t **head)
+{
+	listint_t *prev = NULL, *current = *head, *next = NULL;
+
+	while (current != NULL)
 	{
-		next = (*head)->next;
-		(*head)->next = prev;
-		prev = *head;
-		*head = next;
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
 	}
 	*head = prev;
 	return (*head);
-}
-
-
-/**
- * check -  check is palimdrome
- * @compare: compare split linked list
- * @head: head linkedlist
- * @number: number of value to stop
- * Return:Head
- *
- */
-int check(listint_t **compare, listint_t **head, int number)
-{
-	listint_t *compareLinked = *compare;
-	listint_t *tmp = *head;
-
-	while (1)
-	{
-		if (compareLinked->n == tmp->n)
-		{
-			if (number == compareLinked->n)
-			{
-				return (1);
-			}
-		}
-		compareLinked = compareLinked->next;
-		tmp = tmp->next;
-	}
-	return (0);
 }
 
